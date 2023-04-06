@@ -6,8 +6,8 @@ enum KeyCode : Int {
     case S = 0x01
     case D = 0x02
     case W = 0x0D
-    case Q = 0x0F
-    case E = 0x10
+    case Q = 0xC
+    case E = 0xE
 }
 
 class ViewController: NSViewController {
@@ -125,8 +125,8 @@ class ViewController: NSViewController {
         let backwardPressed = keysPressed[KeyCode.S.rawValue]
         let leftPressed = keysPressed[KeyCode.A.rawValue]
         let rightPressed = keysPressed[KeyCode.D.rawValue]
-        let upPressed = keysPressed[KeyCode.Q.rawValue]
-        let downPressed = keysPressed[KeyCode.E.rawValue]
+        let upPressed = keysPressed[KeyCode.E.rawValue]
+        let downPressed = keysPressed[KeyCode.Q.rawValue]
 
         renderer.camera.update(timestep: timestep,
                                mouseDelta: float2(cursorDeltaX, cursorDeltaY),

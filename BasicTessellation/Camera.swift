@@ -5,7 +5,7 @@ import simd
 class Camera {
     let up = float3(0, 1, 0)
     var fieldOfView: Float = 60.0 // vertical, radians
-    var eyeSpeed: Float = 4
+    var eyeSpeed: Float = 2
     var radiansPerCursorPoint: Float = 0.0125
     var maximumPitchRadians: Float = (.pi / 2.0) * 0.98
 
@@ -48,16 +48,20 @@ class Camera {
 
         let xMovement: Float = (leftPressed ? -1.0 : 0.0) + (rightPressed ? 1.0 : 0.0)
         let zMovement: Float = (backwardPressed ? -1.0 : 0.0) + (forwardPressed ? 1.0 : 0.0)
-        let upMovement: Float = (upPressed ? 1.0 : 0.0)
-        let downMovement: Float = (downPressed ? -1.0 : 0.0)
+        let upDownMovement: Float = (upPressed ? 1.0 : 0.0) + (downPressed ? -1.0 : 0.0)
         
-        let movementMagnitude = hypot(xMovement, zMovement)
-        if movementMagnitude > 1e-4 {
+        let movementMagnitudeToXZPlane = hypot(xMovement, zMovement)
+        let movementMagnitudeToUpDown = upDownMovement
+        if movementMagnitudeToXZPlane > 1e-4 {
             let xzMovement = float3(xMovement * across.x + zMovement * forward.x,
                                     xMovement * across.y + zMovement * forward.y,
                                     xMovement * across.z + zMovement * forward.z)
-            let yMovement = float3(0, upMovement, 0)
             eye += normalize(xzMovement) * eyeSpeed * timestep
+        }
+        
+        if abs(movementMagnitudeToUpDown) > 1e-4 {
+            let yMovement = float3(0, upDownMovement, 0)
+            eye += normalize(yMovement) * eyeSpeed * timestep
         }
 
         if mouseDelta.x != 0 {
